@@ -1,0 +1,28 @@
+//redux state
+
+//--------api wishlist
+//add to wish list
+//remove from wish list
+
+
+//--------api product
+//get product base on category
+
+
+//--------api order
+//create order
+
+
+//--------api cart
+//add to cart
+//remove from cart
+//update qty in cart page (increase, decrease by 1 al so the total price)
+
+
+//--------api user
+//get all information after login
+
+
+//--------api auth
+//login (get all information after login)
+//register
