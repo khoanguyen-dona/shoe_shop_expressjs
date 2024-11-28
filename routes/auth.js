@@ -1,5 +1,7 @@
 
 const User = require('../models/User')
+const Wishlist = require ('../models/Wishlist')
+
 const router = require('express').Router()
 const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
@@ -15,7 +17,13 @@ router.post('/register', async (req, res) => {
     try {
 
         const savedUser = await newUser.save();
+        const wishlist = new Wishlist({
+            userId: savedUser._id,
+            products: []
+        })
+        await wishlist.save()
         res.status(201).json(savedUser);
+       
     } catch (err) {
         res.status(500).json(err);
     }
@@ -42,6 +50,8 @@ router.post('/login', async(req, res) => {
           );
         const { password, ...others} = user._doc
         res.status(200).json({...others, accessToken})
+   
+
     } catch(err) {
         res.status(500).json(err)
     }
