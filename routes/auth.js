@@ -1,7 +1,7 @@
 
 const User = require('../models/User')
 const Wishlist = require ('../models/Wishlist')
-
+const Cart = require('../models/Cart')
 const router = require('express').Router()
 const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
@@ -17,11 +17,20 @@ router.post('/register', async (req, res) => {
     try {
 
         const savedUser = await newUser.save();
+
+        // create wishlist
         const wishlist = new Wishlist({
             userId: savedUser._id,
             products: []
         })
         await wishlist.save()
+
+        // create cart
+        const cart = new Cart({
+            userId: savedUser._id
+        })
+        await cart.save()
+
         res.status(201).json(savedUser);
        
     } catch (err) {

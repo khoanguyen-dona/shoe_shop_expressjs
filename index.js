@@ -3,9 +3,9 @@ const app = express()
 const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 dotenv.config()
-// const userRoute = require('./routes/user')
-// const cartRoute = require('./routes/cart')
+
 // const orderRoute = require('./routes/order')
+const cartRoute = require('./routes/cart')
 const productRoute = require('./routes/product')
 const authRoute = require('./routes/auth')
 const wishlistRoute = require('./routes/wishlist')
@@ -27,6 +27,6 @@ app.use(express.static("public"));
 app.use('/api/auth', authRoute);
 app.use('/api/wishlist', wishlistRoute);
 app.use('/api/product', productRoute);
-// app.use('/api/user', userRoute);
-// app.use('/api/cart', cartRoute);
+app.use('/api/cart', cartRoute);
+
 // app.use('/api/order', orderRoute);
