@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 dotenv.config()
 
-// const orderRoute = require('./routes/order')
+const orderRoute = require('./routes/order')
 const cartRoute = require('./routes/cart')
 const productRoute = require('./routes/product')
 const authRoute = require('./routes/auth')
@@ -28,5 +28,6 @@ app.use('/api/auth', authRoute);
 app.use('/api/wishlist', wishlistRoute);
 app.use('/api/product', productRoute);
 app.use('/api/cart', cartRoute);
+app.use('/api/order', orderRoute);
 
-// app.use('/api/order', orderRoute);
+

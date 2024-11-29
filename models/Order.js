@@ -7,14 +7,18 @@ const OrderSchema = new mongoose.Schema(
         products:[ 
             {
                 productId: { type: String}, 
+                thumbnail: { type: String},
+                price: { type: Number},
+                color: { type: String},
+                size: { type: String},
                 quantity: { type: Number}  
             }
         ],
-        phoneNumber: { type: Number, required: true},
+        phoneNumber: { type: String, required: true},
         address: { type: String, required: true },
         email: { type: String},
-        total: { type: Number, required: true  },
-        status: { type: String, default:'processing'},
+        total: { type: Number },
+        status: { type: String , default: 'processing'},
         paymentMethod: { type: String, required: true},
         message: { type: String}
     },
