@@ -10,6 +10,7 @@ router.post('/:userId', async (req, res) => {
     const quantity = req.body.quantity ;
     const size = req.body.size;
     const color = req.body.color;
+    const name = req.body.name;
 
     try{
 
@@ -27,6 +28,7 @@ router.post('/:userId', async (req, res) => {
 
             cart.products.push({
                 productId: product_id,
+                name: name,
                 thumbnail: product.thumbnail,
                 price: product.price,
                 quantity: quantity,
@@ -103,6 +105,17 @@ router.post('/:userId/delete-item', async (req, res) => {
     }
 
 } )
-
+// reset cart
+ router.post('/:userId/reset-cart', async (req, res) => {
+    const user_id = req.params.userId
+    try {
+        const cart = await Cart.findOne({userId: user_id})
+        cart.products= []
+        await cart.save()
+        res.status(200).json({message:'reset successfully', cart: cart})
+    }catch (err) {
+        console.log(err)
+    }
+ })
 
 module.exports = router

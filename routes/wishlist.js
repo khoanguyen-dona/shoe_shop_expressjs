@@ -2,6 +2,7 @@ const router = require('express').Router()
 const Wishlist = require('../models/Wishlist')
 const Product = require('../models/Product')
 
+// add to wishlist
 router.post("/:userId", async (req, res) => {
     try {
         const user_id = req.params.userId

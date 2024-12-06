@@ -57,8 +57,13 @@ router.post('/login', async(req, res) => {
             process.env.JWT_SECRET_KEY,
             {expiresIn:"1d"}
           );
+
+        const cart = await Cart.findOne({userId: user._id})
+        const wishlist= await Wishlist.findOne({userId: user._id})
+
+
         const { password, ...others} = user._doc
-        res.status(200).json({...others, accessToken})
+        res.status(200).json({...others, accessToken,cart: cart, wishlist: wishlist})
    
 
     } catch(err) {

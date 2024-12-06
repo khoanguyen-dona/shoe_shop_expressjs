@@ -5,7 +5,7 @@ const Order = require('../models/Order')
 
 
 //create order
-router.post("/:userId", async (req, res) => {
+router.post("/order/:userId", async (req, res) => {
 
     try {
         const user_id = req.params.userId
@@ -40,6 +40,29 @@ router.post("/:userId", async (req, res) => {
     }
 } );
 
+//get order
+
+router.get('/order/:orderId', async (req, res) => {
+    try {
+        const order_id = req.params.orderId
+        const order = await Order.findById(order_id)
+        res.status(200).json(order)
+
+    }catch(err) {
+        res.status(500).json(err)
+    }
+})
+
+//get orders 
+router.get('/orders/:userId', async (req, res) => {
+    try{
+        const user_id = req.params.userId
+        const orders = await Order.find({userId: user_id})
+        res.status(200).json({message:'get orders successfully', orders: orders})
+    } catch(err) {
+        res.status(500).json(err)
+    }
+})
 
 
 module.exports = router

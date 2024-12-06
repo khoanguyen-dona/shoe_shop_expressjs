@@ -9,6 +9,7 @@ const cartRoute = require('./routes/cart')
 const productRoute = require('./routes/product')
 const authRoute = require('./routes/auth')
 const wishlistRoute = require('./routes/wishlist')
+const userRoute = require('./routes/user')
 const cors = require('cors')
 
 
@@ -28,6 +29,6 @@ app.use('/api/auth', authRoute);
 app.use('/api/wishlist', wishlistRoute);
 app.use('/api/product', productRoute);
 app.use('/api/cart', cartRoute);
-app.use('/api/order', orderRoute);
-
+app.use('/api/', orderRoute);
+app.use('/api/user', userRoute);
 
