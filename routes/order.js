@@ -53,7 +53,7 @@ router.get('/order/:orderId', async (req, res) => {
     }
 })
 
-//get orders 
+//get user orders 
 router.get('/orders/:userId', async (req, res) => {
     try{
         const user_id = req.params.userId
@@ -64,5 +64,42 @@ router.get('/orders/:userId', async (req, res) => {
     }
 })
 
+//get all orders
+router.get('/admin/orders', async (req, res) => {
+    try{
+        const orders = await Order.find()
+        res.status(200).json({message:'query successfully', orders:orders})
+    } catch(err) {
+        res.status(500).json(err)
+    }
+} )
+
+// update order
+router.put('/admin/order/:orderId', async (req, res) => {
+    try{
+        const updatedOrder = await Order.findByIdAndUpdate(
+            req.params.orderId,
+            {
+                $set: req.body
+            },
+            { new: true }
+        )
+        res.status(200).json({message:"update order successfully", order: updatedOrder})
+    }catch(err) {
+        res.status(500).json(err)
+    }
+})
+
+// delete order
+//delete product
+router.delete('/admin/order/:orderId', async (req, res) => {
+    const order_id = req.params.orderId
+    try{
+        await Order.findByIdAndDelete(order_id)
+        res.status(200).json("order deleted successfully")
+    } catch(err){
+        res.status(500).json(err)
+    }
+})
 
 module.exports = router

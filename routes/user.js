@@ -35,4 +35,34 @@ router.put('/:userId/update-password',async (req, res) => {
     }
 })
 
+//get users
+router.get('/', async(req, res) => {
+    try{
+        const users = await User.find()
+        res.status(200).json({message:'get users successfully', users: users})
+    } catch(err){
+        console.log(err)
+    }
+})
+//get user
+router.get('/:userId', async(req, res) => {
+    try {
+        const user = await User.findById(req.params.userId)
+        res.status(200).json({message:'Get user successfully', user: user})
+    } catch(err) {
+        console.log(err)
+    }
+})
+
+//delete user
+router.delete('/:userId', async (req, res) => {
+    const user_id = req.params.userId
+    try{
+        await User.findByIdAndDelete(user_id)
+        res.status(200).json("User deleted successfully")
+    } catch(err){
+        res.status(500).json(err)
+    }
+})
+
 module.exports = router
