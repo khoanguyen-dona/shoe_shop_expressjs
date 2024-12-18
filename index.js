@@ -10,6 +10,9 @@ const productRoute = require('./routes/product')
 const authRoute = require('./routes/auth')
 const wishlistRoute = require('./routes/wishlist')
 const userRoute = require('./routes/user')
+const categoryRoute = require('./routes/category')
+const subCategoryRoute = require('./routes/subCategory')
+const productLineRoute = require('./routes/productLine')
 const cors = require('cors')
 
 
@@ -31,5 +34,7 @@ app.use('/api/product', productRoute);
 app.use('/api/cart', cartRoute);
 app.use('/api/', orderRoute);
 app.use('/api/user', userRoute);
-
+app.use('/api/category', categoryRoute);
+app.use('/api/sub-category', subCategoryRoute);
+app.use('/api/productLine', productLineRoute)
 
