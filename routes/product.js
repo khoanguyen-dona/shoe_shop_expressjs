@@ -15,39 +15,29 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-// get products base on category
-// router.get('', async (req, res) => {
-    
-//     try {
-//         qCategory = req.query.category
-//         if(qCategory){
-//             const products = await Product.find({ categories: {
-//                 $in: [qCategory]
-//             } })          
-//             res.status(201).json(products);
-//         } else {
-//             const products = await Product.find()           
-//             res.status(201).json(products);
-//         }      
-//     } catch (err) {
-//         res.status(500).json(err);
-//     }
-// })
+// get products with multifield condition and pagination
 
-// get products base on category with pagination
 router.get('', async (req, res) => {
     const page = parseInt(req.query.page) 
     const limit = parseInt(req.query.limit) 
-
-    const startIndex = (page - 1) * limit 
-    const endIndex = (startIndex + limit) 
+    const startIndex = parseInt((page - 1) * limit) 
+    const endIndex = parseInt((startIndex + limit)) 
+    let color = req.query.color 
+    let size = String(req.query.size)  
+    let qCategory = req.query.category
+    const minPrice = parseInt(req.query.minPrice) || 0
+    const maxPrice = parseInt(req.query.maxPrice) || 1000000000
     try {
-        qCategory = req.query.category
-        if (qCategory) {
-            console.log(qCategory)
-            qCategory=qCategory.split(',')
+        if ( qCategory  ) {       
+            qCategory= qCategory.split(',')
+            
             const products = await Product.find({
-                categories: { $in: qCategory}
+                $and: [    
+                    qCategory ? { categories: { $in: qCategory } } : {},
+                    color ? { color: { $in: color} }  : {},
+                    size ? { size:  { $in: size } }  : {},
+                    { price: { $gte: minPrice , $lte: maxPrice } }
+                ]
             })   
             const paginated_products = products.slice(startIndex,endIndex) 
             const totalPage = Math.ceil(products.length / limit)
