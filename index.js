@@ -36,5 +36,5 @@ app.use('/api/', orderRoute);
 app.use('/api/user', userRoute);
 app.use('/api/category', categoryRoute);
 app.use('/api/sub-category', subCategoryRoute);
-app.use('/api/productLine', productLineRoute)
+app.use('/api/product-line', productLineRoute)
 
