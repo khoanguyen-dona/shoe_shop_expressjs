@@ -13,6 +13,7 @@ const userRoute = require('./routes/user')
 const categoryRoute = require('./routes/category')
 const subCategoryRoute = require('./routes/subCategory')
 const productLineRoute = require('./routes/productLine')
+const attributeRoute = require('./routes/attribute')
 const cors = require('cors')
 
 
@@ -37,4 +38,5 @@ app.use('/api/user', userRoute);
 app.use('/api/category', categoryRoute);
 app.use('/api/sub-category', subCategoryRoute);
 app.use('/api/product-line', productLineRoute)
+app.use('/api/attribute', attributeRoute)
 
