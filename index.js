@@ -28,7 +28,7 @@ app.listen(process.env.PORT ,() => {
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static("public"));
+
 app.use('/api/auth', authRoute);
 app.use('/api/wishlist', wishlistRoute);
 app.use('/api/product', productRoute);

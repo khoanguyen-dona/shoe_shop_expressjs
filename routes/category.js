@@ -19,7 +19,7 @@ router.post('', async(req, res) => {
 router.get('', async(req, res) => {
     try {
         const category = await Category.find()
-        res.status(200).json({message:'get categories successfully', category: category})
+        res.status(200).json({message:'get categories successfully', categories: category})
     } catch(err) {
         res.status(500).json(err)
     }

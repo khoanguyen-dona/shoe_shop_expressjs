@@ -1,7 +1,9 @@
 const Cart = require('../models/Cart')
 const Product = require('../models/Product')
 const router = require('express').Router()
-
+const {
+    verifyToken
+} = require('./verifyToken')
 
 // add to cart , increase number of item
 router.post('/:userId', async (req, res) => {

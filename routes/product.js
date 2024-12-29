@@ -30,7 +30,6 @@ router.get('', async (req, res) => {
     try {
         if ( qCategory  ) {       
             qCategory= qCategory.split(',')
-            
             const products = await Product.find({
                 $and: [    
                     qCategory ? { categories: { $in: qCategory } } : {},

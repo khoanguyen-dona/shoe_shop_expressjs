@@ -55,7 +55,7 @@ router.post('/login', async(req, res) => {
               isAdmin: user.isAdmin,
             },
             process.env.JWT_SECRET_KEY,
-            {expiresIn:"1d"}
+            {expiresIn:"1m"}
           );
 
         const cart = await Cart.findOne({userId: user._id})
@@ -63,7 +63,7 @@ router.post('/login', async(req, res) => {
 
 
         const { password, ...others} = user._doc
-        res.status(200).json({...others, accessToken,cart: cart, wishlist: wishlist})
+        res.status(200).json({...others, accessToken: accessToken,cart: cart, wishlist: wishlist})
    
 
     } catch(err) {
