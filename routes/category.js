@@ -1,9 +1,12 @@
 
 const router = require('express').Router()
 const Category = require('../models/Category')
+const {
+    verifyTokenAndAdmin
+} = require('./verifyToken')
 
 // create a category
-router.post('', async(req, res) => {
+router.post('', verifyTokenAndAdmin, async(req, res) => {
     const name = req.body.name
     try {
         const newCategory = new Category({
@@ -26,7 +29,7 @@ router.get('', async(req, res) => {
 })
 
 // delete category by id
-router.delete('/:categoryId', async(req, res) => {
+router.delete('/:categoryId', verifyTokenAndAdmin, async(req, res) => {
     try {
          await Category.findByIdAndDelete(req.params.categoryId)
         res.status(200).json('Delete successfully' )
@@ -46,7 +49,7 @@ router.get('/:categoryId', async(req, res) => {
 })
 
 //update category
-router.put('/:categoryId', async(req, res) => {
+router.put('/:categoryId',verifyTokenAndAdmin, async(req, res) => {
     try {
         const updatedCat = await Category.findByIdAndUpdate(
             req.params.categoryId,

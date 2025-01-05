@@ -11,7 +11,7 @@ router.post('/register', async (req, res) => {
     const newUser = new User({
         username: req.body.username,
         email: req.body.email,
-        password: req.body.password
+        password: req.body.password,
     });
 
     try {
@@ -55,7 +55,7 @@ router.post('/login', async(req, res) => {
               isAdmin: user.isAdmin,
             },
             process.env.JWT_SECRET_KEY,
-            {expiresIn:"1m"}
+            // {expiresIn:"1m"}
           );
 
         const cart = await Cart.findOne({userId: user._id})
@@ -71,5 +71,42 @@ router.post('/login', async(req, res) => {
     }
 })
 
+//admin login 
+
+router.post('/admin-login', async(req, res) => {
+    try{
+
+        const user = await User.findOne({email: req.body.email})
+        if(!user){
+            return res.status(400).json('Sai email hoặc mật khẩu')
+        }
+        if( user.isAdmin===false){
+            return res.status(400).json('You are not admin')
+        }
+        
+        if( user.password!== req.body.password  ){
+            return res.status(400).json('Sai email hoặc mật khẩu')
+        }
+        const accessToken = jwt.sign(
+            {
+              id: user._id,
+              isAdmin: user.isAdmin,
+            },
+            process.env.JWT_SECRET_KEY,
+            // {expiresIn:"1m"}
+          );
+
+        const cart = await Cart.findOne({userId: user._id})
+        const wishlist= await Wishlist.findOne({userId: user._id})
+
+
+        const { password, ...others} = user._doc
+        res.status(200).json({...others, accessToken: accessToken,cart: cart, wishlist: wishlist})
+   
+
+    } catch(err) {
+        res.status(500).json(err)
+    }
+})
 
 module.exports = router

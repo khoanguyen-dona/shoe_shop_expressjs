@@ -1,8 +1,12 @@
 const router = require('express').Router()
 const User = require('../models/User')
+const {
+    verifyTokenAndAdmin,
+    verifyTokenAndAuthorization
+} = require('./verifyToken')
 
 //update user
-router.put('/:userId', async (req, res) => {
+router.put('/:userId', verifyTokenAndAuthorization, async (req, res) => {
     try{
         const updatedUser = await User.findByIdAndUpdate(
             req.params.userId,
@@ -18,7 +22,7 @@ router.put('/:userId', async (req, res) => {
 })
 
 //update password
-router.put('/:userId/update-password',async (req, res) => {
+router.put('/:userId/update-password', verifyTokenAndAuthorization, async (req, res) => {
     try{
         const user = await User.findById(req.params.userId)
 
@@ -36,16 +40,16 @@ router.put('/:userId/update-password',async (req, res) => {
 })
 
 //get users
-router.get('/', async(req, res) => {
+router.get('/', verifyTokenAndAdmin, async(req, res) => {
     try{
-        const users = await User.find()
+        const users = await User.find({isAdmin:false})
         res.status(200).json({message:'get users successfully', users: users})
     } catch(err){
         console.log(err)
     }
 })
 //get user
-router.get('/:userId', async(req, res) => {
+router.get('/:userId', verifyTokenAndAuthorization, async(req, res) => {
     try {
         const user = await User.findById(req.params.userId)
         res.status(200).json({message:'Get user successfully', user: user})
@@ -55,7 +59,7 @@ router.get('/:userId', async(req, res) => {
 })
 
 //delete user
-router.delete('/:userId', async (req, res) => {
+router.delete('/:userId', verifyTokenAndAdmin, async (req, res) => {
     const user_id = req.params.userId
     try{
         await User.findByIdAndDelete(user_id)

@@ -1,9 +1,12 @@
 const router = require('express').Router()
 const Wishlist = require('../models/Wishlist')
 const Product = require('../models/Product')
+const {
+    verifyTokenAndAuthorization
+} = require('./verifyToken')
 
 // add to wishlist
-router.post("/:userId", async (req, res) => {
+router.post("/:userId", verifyTokenAndAuthorization, async (req, res) => {
     try {
         const user_id = req.params.userId
         const product_id = req.body.productId

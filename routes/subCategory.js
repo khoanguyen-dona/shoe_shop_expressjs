@@ -1,8 +1,11 @@
 const router = require('express').Router()
 const SubCategory = require('../models/SubCategory')
+const {
+    verifyTokenAndAdmin
+} = require('./verifyToken')
 
 //create subCategory
-router.post('', async(req, res) => {
+router.post('', verifyTokenAndAdmin, async(req, res) => {
     const name = req.body.name
     const categoryId = req.body.categoryId
     try {
@@ -28,7 +31,7 @@ router.get('/:categoryId', async(req, res) => {
 })
 
 // delete subCategory
-router.delete('/:categoryId', async(req, res) => {
+router.delete('/:categoryId', verifyTokenAndAdmin, async(req, res) => {
     try {
         await SubCategory.findByIdAndDelete(req.params.categoryId)
         res.status(200).json('Delete sub-category successfully')
@@ -39,7 +42,7 @@ router.delete('/:categoryId', async(req, res) => {
 })
 // update subCat
 
-router.put('/:categoryId', async(req, res) => {
+router.put('/:categoryId', verifyTokenAndAdmin, async(req, res) => {
     try {
         const updatedSubCat = await SubCategory.findByIdAndUpdate(
             req.params.categoryId,

@@ -1,9 +1,11 @@
 
 const router = require('express').Router()
 const Attribute = require('../models/Attribute')
-
+const {
+    verifyTokenAndAdmin
+} = require('./verifyToken')
 //create attribute
-router.post('', async(req, res) => {
+router.post('', verifyTokenAndAdmin, async(req, res) => {
     try {
         const newAttribute = new Attribute({
             name: req.body.name
@@ -16,7 +18,7 @@ router.post('', async(req, res) => {
 })
 
 //get all attribute
-router.get('', async(req, res) => {
+router.get('',  async(req, res) => {
     try {
         const attributes = await Attribute.find()
         res.status(200).json({message:'get attributes successfully', attributes: attributes})
@@ -26,7 +28,7 @@ router.get('', async(req, res) => {
 })
 
 //delete attribute
-router.delete('/:attributeId', async(req, res) => {
+router.delete('/:attributeId', verifyTokenAndAdmin, async(req, res) => {
     try {
         await Attribute.findByIdAndDelete(req.params.attributeId)
         res.status(200).json({message:'attribute deleted successfully'})
@@ -37,7 +39,7 @@ router.delete('/:attributeId', async(req, res) => {
 })
 
 //update attribute
-router.put('/:attributeId', async (req, res) => {
+router.put('/:attributeId', verifyTokenAndAdmin, async (req, res) => {
     try{
         const updatedAttribute = await Attribute.findByIdAndUpdate(
             req.params.attributeId,

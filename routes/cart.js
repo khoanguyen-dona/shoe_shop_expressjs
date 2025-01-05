@@ -2,11 +2,11 @@ const Cart = require('../models/Cart')
 const Product = require('../models/Product')
 const router = require('express').Router()
 const {
-    verifyToken
+     verifyTokenAndAuthorization
 } = require('./verifyToken')
 
 // add to cart , increase number of item
-router.post('/:userId', async (req, res) => {
+router.post('/:userId', verifyTokenAndAuthorization,  async (req, res) => {
     const user_id = req.params.userId ;
     const product_id = req.body.productId ;
     const quantity = req.body.quantity ;
@@ -47,7 +47,7 @@ router.post('/:userId', async (req, res) => {
 } )
 
 // decrease number of item
-router.post('/:userId/decrease-item', async (req, res) => {
+router.post('/:userId/decrease-item', verifyTokenAndAuthorization, async (req, res) => {
     const user_id = req.params.userId ;
     const product_id = req.body.productId ;
     const size = req.body.size;
@@ -62,7 +62,7 @@ router.post('/:userId/decrease-item', async (req, res) => {
 
         if (itemExist ) {
             itemExist.quantity = itemExist.quantity - 1
-            console.log('itemexist ----->',itemExist)
+       
             if ( itemExist.quantity >=1 ){
                 await cart.save()
                 return res.status(200).json({message:'decrease successfully', cart: cart})
@@ -82,7 +82,7 @@ router.post('/:userId/decrease-item', async (req, res) => {
 } )
 
 // delete item in cart
-router.post('/:userId/delete-item', async (req, res) => {
+router.post('/:userId/delete-item', verifyTokenAndAuthorization, async (req, res) => {
     const user_id = req.params.userId ;
     const product_id = req.body.productId ;
     const size = req.body.size;
@@ -94,7 +94,7 @@ router.post('/:userId/delete-item', async (req, res) => {
     && item.size.toString() === size && item.color.toString() === color )
     
         if (itemExist ) {
-            console.log('itemexist--->',itemExist)
+           
             cart.products.remove(itemExist)
             await cart.save()
             return res.status(200).json({message:'delete successfully', cart: cart})       
@@ -108,7 +108,7 @@ router.post('/:userId/delete-item', async (req, res) => {
 
 } )
 // reset cart
- router.post('/:userId/reset-cart', async (req, res) => {
+ router.post('/:userId/reset-cart', verifyTokenAndAuthorization, async (req, res) => {
     const user_id = req.params.userId
     try {
         const cart = await Cart.findOne({userId: user_id})

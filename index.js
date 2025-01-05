@@ -14,6 +14,7 @@ const categoryRoute = require('./routes/category')
 const subCategoryRoute = require('./routes/subCategory')
 const productLineRoute = require('./routes/productLine')
 const attributeRoute = require('./routes/attribute')
+const verifyAdminRoute = require('./routes/verifyAdmin')
 const cors = require('cors')
 
 
@@ -39,4 +40,4 @@ app.use('/api/category', categoryRoute);
 app.use('/api/sub-category', subCategoryRoute);
 app.use('/api/product-line', productLineRoute)
 app.use('/api/attribute', attributeRoute)
-
+app.use('/api/verifyAdmin', verifyAdminRoute)

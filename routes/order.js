@@ -1,7 +1,10 @@
 const router = require('express').Router()
 
 const Order = require('../models/Order')
-
+const {
+    verifyTokenAndAuthorization,
+    verifyTokenAndAdmin
+} = require('./verifyToken')
 
 
 //create order
@@ -42,7 +45,7 @@ router.post("/order/:userId", async (req, res) => {
 
 //get order
 
-router.get('/order/:orderId', async (req, res) => {
+router.get('/order/:orderId', verifyTokenAndAuthorization, async (req, res) => {
     try {
         const order_id = req.params.orderId
         const order = await Order.findById(order_id)
@@ -54,7 +57,7 @@ router.get('/order/:orderId', async (req, res) => {
 })
 
 //get user orders 
-router.get('/orders/:userId', async (req, res) => {
+router.get('/orders/:userId', verifyTokenAndAuthorization, async (req, res) => {
     try{
         const user_id = req.params.userId
         const orders = await Order.find({userId: user_id})
@@ -65,7 +68,7 @@ router.get('/orders/:userId', async (req, res) => {
 })
 
 //get all orders
-router.get('/admin/orders', async (req, res) => {
+router.get('/admin/orders', verifyTokenAndAdmin,  async (req, res) => {
     try{
         const orders = await Order.find()
         res.status(200).json({message:'query successfully', orders:orders})
@@ -75,7 +78,7 @@ router.get('/admin/orders', async (req, res) => {
 } )
 
 // update order
-router.put('/admin/order/:orderId', async (req, res) => {
+router.put('/admin/order/:orderId', verifyTokenAndAdmin, async (req, res) => {
     try{
         const updatedOrder = await Order.findByIdAndUpdate(
             req.params.orderId,
@@ -91,8 +94,7 @@ router.put('/admin/order/:orderId', async (req, res) => {
 })
 
 // delete order
-//delete product
-router.delete('/admin/order/:orderId', async (req, res) => {
+router.delete('/admin/order/:orderId', verifyTokenAndAdmin, async (req, res) => {
     const order_id = req.params.orderId
     try{
         await Order.findByIdAndDelete(order_id)

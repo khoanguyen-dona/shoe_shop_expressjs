@@ -1,9 +1,12 @@
 
 const router = require('express').Router()
 const ProductLine = require('../models/ProductLine')
+const {
+    verifyTokenAndAdmin
+} = require('./verifyToken')
 
 // create product line
-router.post('', async(req, res) => {
+router.post('', verifyTokenAndAdmin, async(req, res) => {
     const name = req.body.name
     try {
         const newProductLine = new ProductLine({
@@ -28,7 +31,7 @@ router.get('', async(req, res) => {
 })
 
 // delete product line by id
-router.delete('/:productLineId', async(req, res) => {
+router.delete('/:productLineId', verifyTokenAndAdmin, async(req, res) => {
     try {
         await ProductLine.findByIdAndDelete(req.params.productLineId) 
         res.status(200).json('Delete product line successfully')
@@ -38,7 +41,7 @@ router.delete('/:productLineId', async(req, res) => {
 })
 
 //update product line by id
-router.put('/:productLineId', async(req, res) => {
+router.put('/:productLineId', verifyTokenAndAdmin, async(req, res) => {
     try {
         const updatedProductLine = await ProductLine.findByIdAndUpdate(
             req.params.productLineId,
