@@ -15,7 +15,8 @@ router.post('/register', async (req, res) => {
     });
 
     try {
-
+        const user = await User.findOne({email:req.body.email})
+       
         const savedUser = await newUser.save();
 
         // create wishlist
