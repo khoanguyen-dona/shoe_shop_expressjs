@@ -69,4 +69,5 @@ router.delete('/:userId', verifyTokenAndAdmin, async (req, res) => {
     }
 })
 
+
 module.exports = router

@@ -31,8 +31,8 @@ router.get('', async (req, res) => {
     const minPrice = parseInt(req.query.minPrice) || 0
     const maxPrice = parseInt(req.query.maxPrice) || 1000000000
     try {
-        if ( qCategory  ) {       
-            qCategory= qCategory.split(',')
+        if ( qCategory ) {       
+            qCategory= qCategory.split(',')     
             const products = await Product.find({
                 $and: [    
                     qCategory ? { categories: { $in: qCategory } } : {},
@@ -99,4 +99,41 @@ router.delete('/:productId', verifyTokenAndAdmin, async (req, res) => {
     }
 })
 
+// search product by name
+router.get('/find/:keyWord', async(req, res) => {
+    const color = req.query.color || ''
+    const page = parseInt(req.query.page) || 1
+    const limit = parseInt(req.query.limit)  || 100
+    const startIndex = parseInt((page - 1) * limit) 
+    const endIndex = parseInt((startIndex + limit))   
+    try {
+        const keyWord = req.params.keyWord
+        const products = await Product.find({
+            $and: [
+                {name: {$regex: keyWord, $options: 'i'}} ,
+                color ? {color:{$in: color} } : {}
+
+            ]
+        })
+             
+        const paginated_products = products.slice(startIndex,endIndex) 
+        const totalPage = Math.ceil(products.length / limit)
+        const totalProducts = products.length
+        res.status(200).json({message:'get products successfully', totalProducts: totalProducts, page: page,
+            totalPage: totalPage, limit: limit, startIndex: startIndex, endIndex: endIndex, products: paginated_products});
+         
+    } catch(err){
+        res.status(500).json(err)
+    }
+})
+
 module.exports = router
+
+// const products = await Product.find({
+//     $and: [    
+//         qCategory ? { categories: { $in: qCategory } } : {},
+//         color ? { color: { $in: color} }  : {},
+//         size ? { size:  { $in: size } }  : {},
+//         { price: { $gte: minPrice , $lte: maxPrice } }
+//     ]
+// })   

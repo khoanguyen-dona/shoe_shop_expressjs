@@ -2,12 +2,15 @@ const jwt = require('jsonwebtoken')
 
 const verifyToken = (req, res, next) => {
     const bearerToken = req.headers.token
-    if (bearerToken) {   
-        const TOKEN = bearerToken.split(" ")[1]  
-        console.log('TOKEN',TOKEN)
+    if (bearerToken) { 
+    
+        const TOKEN = bearerToken.split(";")[0].split(" ")[1]
+        const userId = bearerToken.split(";")[1].split(" ")[1]
+       
         jwt.verify(TOKEN, process.env.JWT_SECRET_KEY, (err, user) => {
             if (err) return res.status(403).json({message: 'Token is not valid'});
             req.user = user;
+            req.id = userId           
             next();
           });
     } else {
@@ -17,7 +20,7 @@ const verifyToken = (req, res, next) => {
 
 const verifyTokenAndAuthorization =(req, res, next) => {
     verifyToken(req, res, () => {
-        if(req.user.id === req.params.userId || req.user.isAdmin === true){
+        if(req.user.id === req.id || req.user.isAdmin === true){
             next();
         } else {
             return res.status(403).json({message: 'You are not allowed to do that '})

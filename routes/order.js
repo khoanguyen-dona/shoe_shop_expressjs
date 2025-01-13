@@ -45,7 +45,7 @@ router.post("/order/:userId", async (req, res) => {
 
 //get order
 
-router.get('/order/:orderId', verifyTokenAndAuthorization, async (req, res) => {
+router.get('/order/:orderId', async (req, res) => {
     try {
         const order_id = req.params.orderId
         const order = await Order.findById(order_id)

@@ -15,9 +15,8 @@ router.post('/register', async (req, res) => {
     });
 
     try {
-        const user = await User.findOne({email:req.body.email})
-       
-        const savedUser = await newUser.save();
+            
+     const savedUser = await newUser.save();
 
         // create wishlist
         const wishlist = new Wishlist({
@@ -109,5 +108,17 @@ router.post('/admin-login', async(req, res) => {
         res.status(500).json(err)
     }
 })
+
+
+  // User Info Route
+//   router.get("/user", (req, res) => {
+//     if (req.user) {
+//         console.log('req user',req.user)
+//       res.status(200).json(req.user);
+//     } else {
+//       res.status(401).json({ message: "Not authenticated" });
+//     }
+//   });
+
 
 module.exports = router
