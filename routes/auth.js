@@ -5,7 +5,7 @@ const Cart = require('../models/Cart')
 const router = require('express').Router()
 const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
-
+const transporter = require('../aws-ses')
 
 router.post('/register', async (req, res) => {
     const newUser = new User({
@@ -16,7 +16,7 @@ router.post('/register', async (req, res) => {
 
     try {
             
-     const savedUser = await newUser.save();
+        const savedUser = await newUser.save();
 
         // create wishlist
         const wishlist = new Wishlist({
@@ -31,8 +31,37 @@ router.post('/register', async (req, res) => {
         })
         await cart.save()
 
-        res.status(201).json(savedUser);
-       
+        //verifyToken
+        const verifyToken =  jwt.sign({
+            userId: savedUser._id,
+            isAdmin: false,
+        }, process.env.JWT_SECRET_KEY, { expiresIn: '24h'})
+        console.log('iat',Date.now())
+        //send verification email
+        try {
+            // Create HTML content for email
+        const emailHtmlContent = `
+        <h2>Xác thực Email của bạn:</h2>
+        <p>Vui lòng bấm vào đường link dưới đây để hoàn tất việc xác thực email(email verification)</p>
+        <a href='http://localhost:${process.env.PORT}/api/auth/email-verification?verifyToken=${verifyToken}' >Xác thực email(email verification)</a>
+        `;
+
+        // Email options
+        const mailOptions = {
+            from: 'ShoeShop@donawebs.com', // Must be verified in SES
+            to: req.body.email,
+            subject: 'Email Verification - Xác thực email!',
+            html: emailHtmlContent,
+        };
+    
+        // Send email
+        const emailResponse = await transporter.sendMail(mailOptions);
+
+        res.status(201).json({savedUser,verifyToken: verifyToken,emailResponse: emailResponse});
+        } catch(err) {
+            console.log('error while sending email',err)
+        }
+     
     } catch (err) {
         res.status(500).json(err);
     }
@@ -89,7 +118,7 @@ router.post('/admin-login', async(req, res) => {
         }
         const accessToken = jwt.sign(
             {
-              id: user._id,
+              userId: user._id,
               isAdmin: user.isAdmin,
             },
             process.env.JWT_SECRET_KEY,
@@ -110,15 +139,26 @@ router.post('/admin-login', async(req, res) => {
 })
 
 
-  // User Info Route
-//   router.get("/user", (req, res) => {
-//     if (req.user) {
-//         console.log('req user',req.user)
-//       res.status(200).json(req.user);
-//     } else {
-//       res.status(401).json({ message: "Not authenticated" });
-//     }
-//   });
+  // email verification
+  router.get('/email-verification', async (req, res) => {
+    const verifyToken = req.query.verifyToken
+    console.log('req verifyTOken',req.query.verifyToken)
 
+    try {
+        const decodedToken = jwt.verify(verifyToken, process.env.JWT_SECRET_KEY)
+        console.log('decodeto',decodedToken)
+        // remove field createdAtt in models User
+        const user = await User.findByIdAndUpdate(decodedToken.userId,{ 
+            verified: true,
+            $unset: { createdAtt: 1 },
+        });
+             
+        if (user){      
+            res.send(`<h1>Email Verified sucessfully</h1>.Click here to <a href='http://localhost:${process.env.FRONT_END_PORT}/login' > Login </a> `)
+        }
+    } catch(err){
+        console.log('err while decode Token',err)
+    }
+  })
 
 module.exports = router

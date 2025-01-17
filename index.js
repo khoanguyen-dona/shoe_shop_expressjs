@@ -1,6 +1,8 @@
 const User = require('./models/User')
 const Cart = require('./models/Cart')
 const Wishlist = require('./models/Wishlist')
+
+const bodyParser = require('body-parser');
 const jwt = require("jsonwebtoken");
 const password_generator = require('password-generator');
 const express = require('express')
@@ -13,6 +15,7 @@ dotenv.config()
 const app = express()
 const mongoose = require('mongoose')
 
+const sendEmailRoute = require('./routes/sendEmail')
 const orderRoute = require('./routes/order')
 const cartRoute = require('./routes/cart')
 const productRoute = require('./routes/product')
@@ -34,6 +37,7 @@ app.use(cors({
     credentials: true,
 }));
 app.use(express.json());
+app.use(bodyParser.json()); 
 
 app.use('/api/auth', authRoute);
 app.use('/api/wishlist', wishlistRoute);
@@ -46,7 +50,7 @@ app.use('/api/sub-category', subCategoryRoute);
 app.use('/api/product-line', productLineRoute)
 app.use('/api/attribute', attributeRoute)
 app.use('/api/verifyAdmin', verifyAdminRoute)
-
+app.use('/send-email', sendEmailRoute);
 // Session setup
 app.use(
     session({
@@ -102,7 +106,6 @@ passport.authenticate("google", { failureRedirect: "/" }),
 }
 );
   
-
 // User Info Route
 app.get("/auth/user", async (req, res) => {
     if (req.user) {
@@ -126,7 +129,8 @@ app.get("/auth/user", async (req, res) => {
                     username: req.user.displayName,
                     email: req.user.emails[0].value,
                     password: password,
-                    img: req.user.photos[0].value
+                    img: req.user.photos[0].value,
+                    verified: true
                 });
             // create new user
             try {
