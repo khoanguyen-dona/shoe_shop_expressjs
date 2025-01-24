@@ -39,7 +39,7 @@ router.post('/send-order-verification', async (req, res) => {
               .join('')}
           </tbody>
         </table>
-        <p>Total: ${formatCurrency(orderDetails.reduce((total, item) => total + item.quantity * item.price, 0))} </p>
+        <p>Total: <strong> ${formatCurrency(orderDetails.reduce((total, item) => total + item.quantity * item.price, 0))} </strong> </p>
       `;
   
       // Email options

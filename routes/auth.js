@@ -36,14 +36,14 @@ router.post('/register', async (req, res) => {
             userId: savedUser._id,
             isAdmin: false,
         }, process.env.JWT_SECRET_KEY, { expiresIn: '24h'})
-        console.log('iat',Date.now())
+       
         //send verification email
         try {
             // Create HTML content for email
         const emailHtmlContent = `
         <h2>Xác thực Email của bạn:</h2>
         <p>Vui lòng bấm vào đường link dưới đây để hoàn tất việc xác thực email(email verification)</p>
-        <a href='http://localhost:${process.env.PORT}/api/auth/email-verification?verifyToken=${verifyToken}' >Xác thực email(email verification)</a>
+        <a href='${process.env.BACK_END_URL}/api/auth/email-verification?verifyToken=${verifyToken}' >Xác thực email(email verification)</a>
         `;
 
         // Email options
@@ -142,11 +142,10 @@ router.post('/admin-login', async(req, res) => {
   // email verification
   router.get('/email-verification', async (req, res) => {
     const verifyToken = req.query.verifyToken
-    console.log('req verifyTOken',req.query.verifyToken)
+   
 
     try {
         const decodedToken = jwt.verify(verifyToken, process.env.JWT_SECRET_KEY)
-        console.log('decodeto',decodedToken)
         // remove field createdAtt in models User
         const user = await User.findByIdAndUpdate(decodedToken.userId,{ 
             verified: true,
@@ -154,7 +153,7 @@ router.post('/admin-login', async(req, res) => {
         });
              
         if (user){      
-            res.send(`<h1>Email Verified sucessfully</h1>.Click here to <a href='http://localhost:${process.env.FRONT_END_PORT}/login' > Login </a> `)
+            res.send(`<h1>Email Verified sucessfully</h1>.Click here to <a href='${process.env.FRONT_END_URL}/login' > Login </a> `)
         }
     } catch(err){
         console.log('err while decode Token',err)

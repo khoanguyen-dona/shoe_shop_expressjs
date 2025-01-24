@@ -33,7 +33,7 @@ mongoose.connect(process.env.MONGO_DB)
         .catch((err) => console.log(err))
 
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: `${process.env.FRONT_END_URL}`,
     credentials: true,
 }));
 app.use(express.json());
@@ -70,7 +70,7 @@ passport.use(
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: "http://localhost:5000/auth/google/callback"
+        callbackURL: `${process.env.BACK_END_URL}/auth/google/callback`
         // callbackURL: "http://localhost:3000",
 
       },
@@ -102,7 +102,7 @@ app.get(
 "/auth/google/callback",
 passport.authenticate("google", { failureRedirect: "/" }),
 (req, res) => {
-    res.redirect('http://localhost:3000');
+    res.redirect(`${process.env.FRONT_END_URL}`);
 }
 );
   
@@ -130,7 +130,8 @@ app.get("/auth/user", async (req, res) => {
                     email: req.user.emails[0].value,
                     password: password,
                     img: req.user.photos[0].value,
-                    verified: true
+                    verified: true,
+                    createdAtt:''
                 });
             // create new user
             try {
@@ -175,7 +176,7 @@ app.get("/auth/user", async (req, res) => {
 // Logout Route
 app.get("/auth/logout", (req, res) => {
     req.logout(() => {
-        res.redirect("http://localhost:3000");
+        res.redirect(`${process.env.FRONT_END_URL}`);
     });
 });
 

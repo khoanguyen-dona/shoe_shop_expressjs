@@ -8,9 +8,9 @@ const UserSchema = new mongoose.Schema(
         isAdmin: { type: Boolean, default: false },
         img: { type: String },
         verified: { type: Boolean, default: false},
-        createdAtt: { type: Date, default: Date.now(), expires: 86400} // 24 hours in seconds
+        createdAtt: { type: Date, default: Date.now(), expires: 86400} // auto delete after 24 hours in seconds until user's email is verified
     },
-    { timestamp: true}
+    { timestamps: true}
     
 )
 
