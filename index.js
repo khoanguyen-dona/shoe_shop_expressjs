@@ -39,6 +39,7 @@ app.use(cors({
 app.use(express.json());
 app.use(bodyParser.json()); 
 
+
 app.use('/api/auth', authRoute);
 app.use('/api/wishlist', wishlistRoute);
 app.use('/api/product', productRoute);
@@ -63,6 +64,11 @@ app.use(
   // Passport setup
 app.use(passport.initialize());
 app.use(passport.session());
+
+//endpoint
+app.get('/', (req, res) => {
+    res.send('It is working !')
+})
 
 // Configure Passport with Google Strategy
 passport.use(
