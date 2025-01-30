@@ -20,6 +20,7 @@ router.post('/send-order-verification', async (req, res) => {
             <tr>
               <th>Sản phẩm</th>
               <th>Ảnh</th>
+              <th>Size</th>
               <th>Số lượng</th>
               <th>Giá tiền</th>
             </tr>
@@ -31,6 +32,7 @@ router.post('/send-order-verification', async (req, res) => {
               <tr>
                 <td>${item.name}</td>
                 <td><img src="${item.thumbnail}" alt="${item.name}" style="width: 100px; height: auto;" /></td>
+                <td>${item.size}</td>
                 <td>${item.quantity}</td>
                 <td>${formatCurrency(item.price)} </td>
               </tr>
