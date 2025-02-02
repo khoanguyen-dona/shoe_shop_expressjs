@@ -108,7 +108,7 @@ app.get(
 "/auth/google/callback",
 passport.authenticate("google", { failureRedirect: "/" }),
 (req, res) => {
-    res.redirect(`${process.env.FRONT_END_URL}`);
+    res.redirect(`${process.env.FRONT_END_URL}?googleAuth=true`);
 }
 );
   
@@ -182,7 +182,7 @@ app.get("/auth/user", async (req, res) => {
 // Logout Route
 app.get("/auth/logout", (req, res) => {
     req.logout(() => {
-        res.redirect(`${process.env.FRONT_END_URL}`);
+        res.redirect(`${process.env.FRONT_END_URL}?logout=true`);
     });
 });
 
