@@ -5,7 +5,7 @@ const Cart = require('../models/Cart')
 const router = require('express').Router()
 const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
-const transporter = require('../aws-ses')
+const resend = require('../resend')
 
 router.post('/register', async (req, res) => {
     const newUser = new User({
@@ -46,16 +46,13 @@ router.post('/register', async (req, res) => {
         <a href='${process.env.BACK_END_URL}/api/auth/email-verification?verifyToken=${verifyToken}' >Xác thực email(email verification)</a>
         `;
 
-        // Email options
-        const mailOptions = {
-            from: 'ShoeShop@donawebs.com', // Must be verified in SES
+        // Send email
+        const emailResponse = await resend.emails.send({
+            from: 'ShoeShop@donawebs.com',
             to: req.body.email,
             subject: 'Email Verification - Xác thực email!',
-            html: emailHtmlContent,
-        };
-    
-        // Send email
-        const emailResponse = await transporter.sendMail(mailOptions);
+            html: emailHtmlContent
+          })
 
         res.status(201).json({savedUser,verifyToken: verifyToken,emailResponse: emailResponse});
         } catch(err) {

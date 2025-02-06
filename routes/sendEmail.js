@@ -1,6 +1,6 @@
+const resend = require('../resend')
 const router = require('express').Router()
 const formatCurrency = require('.././Utils/formatCurrency')
-const transporter = require('../aws-ses')
 
 router.post('/send-order-verification', async (req, res) => {
     try {
@@ -43,19 +43,20 @@ router.post('/send-order-verification', async (req, res) => {
         </table>
         <p>Total: <strong> ${formatCurrency(orderDetails.reduce((total, item) => total + item.quantity * item.price, 0))} </strong> </p>
       `;
-  
-      // Email options
-      const mailOptions = {
-        from: 'ShoeShop@donawebs.com', // Must be verified in SES
+   
+      // Send email
+      const emailResponse = await resend.emails.send({
+        from: 'ShoeShop@donawebs.com',
         to: customerEmail,
         subject: 'Order Confirmation - Thank you for your order!',
-        html: emailHtmlContent,
-      };
-  
-      // Send email
-      const emailResponse = await transporter.sendMail(mailOptions);
-  
-      res.status(200).json({ message: 'Order confirmation email sent successfully!', emailResponse });
+        html: emailHtmlContent
+      })
+      if( emailResponse.error===null ){
+        res.status(200).json({ message: 'Order confirmation email sent successfully!', emailResponse });
+      } else {
+        res.status(500).json({ message: "fail to send email", emailResponse})
+      }
+      console.log('email-res',emailResponse)
     } catch (error) {
       console.error('Error sending email:', error);
       res.status(500).json({ message: 'Error sending email', error });
