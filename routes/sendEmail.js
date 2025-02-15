@@ -56,7 +56,6 @@ router.post('/send-order-verification', async (req, res) => {
       } else {
         res.status(500).json({ message: "fail to send email", emailResponse})
       }
-      console.log('email-res',emailResponse)
     } catch (error) {
       console.error('Error sending email:', error);
       res.status(500).json({ message: 'Error sending email', error });
