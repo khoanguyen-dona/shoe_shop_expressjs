@@ -26,7 +26,7 @@ const categoryRoute = require('./routes/category')
 const subCategoryRoute = require('./routes/subCategory')
 const productLineRoute = require('./routes/productLine')
 const attributeRoute = require('./routes/attribute')
-const verifyAdminRoute = require('./routes/verifyAdmin')
+
 
 mongoose.connect(process.env.MONGO_DB)
         .then(() => console.log("DB connect successfully"))
@@ -50,7 +50,6 @@ app.use('/api/category', categoryRoute);
 app.use('/api/sub-category', subCategoryRoute);
 app.use('/api/product-line', productLineRoute)
 app.use('/api/attribute', attributeRoute)
-app.use('/api/verifyAdmin', verifyAdminRoute)
 app.use('/send-email', sendEmailRoute);
 // Session setup
 app.use(
