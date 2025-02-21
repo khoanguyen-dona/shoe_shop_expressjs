@@ -12,6 +12,7 @@ router.post('/register', async (req, res) => {
         username: req.body.username,
         email: req.body.email,
         password: req.body.password,
+        img: 'https://firebasestorage.googleapis.com/v0/b/adidas-shop-d0636.appspot.com/o/upload%2Favatar%2F1739627652315Giay_Ultraboost_5_trang_ID8810_HM5.avif?alt=media&token=b7642697-4818-489e-b5b5-3dd853044ffe',
     });
 
     try {
