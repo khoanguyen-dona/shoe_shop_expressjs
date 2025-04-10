@@ -132,7 +132,7 @@ app.get("/auth/user", async (req, res) => {
                     username: req.user.displayName,
                     email: req.user.emails[0].value,
                     password: password,
-                    img: req.user.photos[0].value,
+                    img: req.user.photos[0].value || 'https://firebasestorage.googleapis.com/v0/b/adidas-shop-d0636.appspot.com/o/upload%2Favatar%2F1739627652315Giay_Ultraboost_5_trang_ID8810_HM5.avif?alt=media&token=b7642697-4818-489e-b5b5-3dd853044ffe',
                     verified: true,
                     createdAtt:''
                 });
