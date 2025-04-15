@@ -26,6 +26,9 @@ const categoryRoute = require('./routes/category')
 const subCategoryRoute = require('./routes/subCategory')
 const productLineRoute = require('./routes/productLine')
 const attributeRoute = require('./routes/attribute')
+const commentRoute = require('./routes/comment')
+const emotionRoute = require('./routes/comment')
+const reportCommentRoute = require('./routes/reportComment')
 
 
 mongoose.connect(process.env.MONGO_DB)
@@ -51,6 +54,10 @@ app.use('/api/sub-category', subCategoryRoute);
 app.use('/api/product-line', productLineRoute)
 app.use('/api/attribute', attributeRoute)
 app.use('/send-email', sendEmailRoute);
+app.use('/api/comment', commentRoute);
+app.use('/api/emotion', emotionRoute);
+app.use('/api/reportComment', reportCommentRoute);
+
 // Session setup
 app.use(
     session({
