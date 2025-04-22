@@ -7,42 +7,50 @@ const {
 } = require('./verifyToken')
 
 
-//create comment 
+//create report comment 
 router.post("/", async (req, res) => {
 
     try {
-        
-        const newComment = new Comment(
-            req.body
-        ) 
-        const savedComment = await newComment.save()
+        const reportComment = await ReportComment.find({
+            $and: [
+                {commentId: req.body.commentId},
+                {productId: req.body.productId},
+                {userId: req.body.userId}
+            ]
+        })
+ 
+        if (reportComment.length>0) {
+            const id = reportComment[0]._id
+            console.log('id',id)
+            const result =  await ReportComment.findByIdAndDelete(reportComment[0]._id)
+            res.status(200).json({message:'delete successfully', data: result})
 
-        res.status(200).json({message:"Commented successfully",comment: savedComment})
+        } else {
+            const newReportComment = new ReportComment(
+                req.body
+            ) 
+            const savedComment = await newReportComment.save()
+            
+            res.status(200).json({message:"Report comment successfully",comment: savedComment})
+        }
 
     } catch(err) {
         res.status(500).json(err)
     }
 } );
 
-//get more comment base on type thread
-
-router.get('/order/:orderId', async (req, res) => {
-    try {
-        const order_id = req.params.orderId
-        const order = await Order.findById(order_id)
-        res.status(200).json(order)
-
-    }catch(err) {
-        res.status(500).json(err)
-    }
-})
-
-
-//get all comment base on productId
-router.get('/admin/orders', verifyTokenAndAdmin,  async (req, res) => {
+//get all report comment base on userId and productId
+router.get('/:userId',  async (req, res) => {
+    console.log('req.quey',req.query)
+    console.log('req.parqams.userId',req.params.userId)
     try{
-        const orders = await Order.find()
-        res.status(200).json({message:'query successfully', orders:orders})
+        const reportComments = await ReportComment.find({
+            $and: [
+                {userId: req.params.userId},
+                {productId: req.query.productId}
+            ]
+        })
+        res.status(200).json({message:'query successfully', reportComments: reportComments})
     } catch(err) {
         res.status(500).json(err)
     }

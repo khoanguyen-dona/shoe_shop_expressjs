@@ -56,7 +56,7 @@ app.use('/api/attribute', attributeRoute)
 app.use('/send-email', sendEmailRoute);
 app.use('/api/comment', commentRoute);
 app.use('/api/emotion', emotionRoute);
-app.use('/api/reportComment', reportCommentRoute);
+app.use('/api/report-comment', reportCommentRoute);
 
 // Session setup
 app.use(
