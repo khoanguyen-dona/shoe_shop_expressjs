@@ -20,8 +20,6 @@ router.post("/", async (req, res) => {
         })
  
         if (reportComment.length>0) {
-            const id = reportComment[0]._id
-            console.log('id',id)
             const result =  await ReportComment.findByIdAndDelete(reportComment[0]._id)
             res.status(200).json({message:'delete successfully', data: result})
 
@@ -41,8 +39,6 @@ router.post("/", async (req, res) => {
 
 //get all report comment base on userId and productId
 router.get('/:userId',  async (req, res) => {
-    console.log('req.quey',req.query)
-    console.log('req.parqams.userId',req.params.userId)
     try{
         const reportComments = await ReportComment.find({
             $and: [

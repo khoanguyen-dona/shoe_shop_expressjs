@@ -27,7 +27,7 @@ const subCategoryRoute = require('./routes/subCategory')
 const productLineRoute = require('./routes/productLine')
 const attributeRoute = require('./routes/attribute')
 const commentRoute = require('./routes/comment')
-const emotionRoute = require('./routes/comment')
+const emotionRoute = require('./routes/emotion')
 const reportCommentRoute = require('./routes/reportComment')
 
 

@@ -28,7 +28,6 @@ router.post("/", async (req, res) => {
             isReplied: req.body.isReplied
         }) 
         const savedComment = await newComment.save()
-        console.log('push to mongodb successfully')
         res.status(200).json({message:"Commented successfully",comment: savedComment})
 
     } catch(err) {

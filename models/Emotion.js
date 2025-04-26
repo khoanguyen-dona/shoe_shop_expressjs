@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { Schema } = mongoose;
 
 const EmotionSchema = new mongoose.Schema(
     {
@@ -8,7 +9,7 @@ const EmotionSchema = new mongoose.Schema(
             required: true ,
         },
         commentId : { type: String, required: true},
-        userId: { type: String, required: true},
+        userId: { type: Schema.Types.ObjectId, ref: 'User'},
     },
     { timestamps: true }
 )
