@@ -10,7 +10,7 @@ const {
 
 //create comment with images 
 
-router.post("/", async (req, res) => {  
+router.post("/",verifyTokenAndAuthorization, async (req, res) => {  
     try {
        
         const newComment = new Comment({
@@ -179,9 +179,7 @@ router.get('/refCommentId/:commentId',  async (req, res) => {
         })
 
         const hasNext = parseInt(limit*page) < totalReplies ? true : false
-        console.log('total', totalReplies)
-        console.log('',limit*page)
-
+  
         res.status(200).json({message:'query successfully', replyData: comments, page: page, hasNext: hasNext})
     } catch(err) {
         res.status(500).json(err)

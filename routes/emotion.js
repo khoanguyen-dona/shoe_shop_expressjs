@@ -9,7 +9,7 @@ const {
 
 
 //create Emotion 
-router.post("/", async (req, res) => {
+router.post("/",verifyTokenAndAuthorization, async (req, res) => {
     try {          
         const emotion = await Emotion.findOne({
             $and:[

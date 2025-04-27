@@ -8,7 +8,7 @@ const {
 
 
 //create report comment 
-router.post("/", async (req, res) => {
+router.post("/",verifyTokenAndAuthorization, async (req, res) => {
 
     try {
         const reportComment = await ReportComment.find({
