@@ -12,6 +12,11 @@ const {
 
 router.post("/",verifyTokenAndAuthorization, async (req, res) => {  
     try {
+        if(req.body.refCommentId!==''){
+            await Comment.findByIdAndUpdate(req.body.refCommentId,{
+                isReplied: true
+            },{new: true})
+        }
        
         const newComment = new Comment({
             productId: req.body.productId,
